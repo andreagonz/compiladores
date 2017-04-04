@@ -1,0 +1,50 @@
+%Especificacion
+\documentclass[12pt]{article}
+
+%Paquetes
+\usepackage[left=2cm,right=2cm,top=3cm,bottom=3cm,letterpaper]{geometry}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,activeacute]{babel}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{enumerate}
+%\usepackage{tabularx}
+%\usepackage{wasysym}
+\usepackage{graphicx}
+%\graphicspath { {tarea01/media/} }
+%\usepackage{pifont}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{alltt}
+
+% Preambulo
+\title{Compiladores \\ Tarea 1}
+\author{Andrea Itzel González Vargas}
+\date{Facultad de Ciencias UNAM}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+\maketitle
+
+\subsubsection{Definir la gramática del lenguaje con la que piensas trabajar:}
+\begin{alltt}
+S     := Asig | Exp;
+Exp   := TermExp'
+Exp'  := +TermExp' | -TermExp' | \(\epsilon\)
+Term  := FactTerm'
+Term' := *FactTerm' | /FactTerm' | \(\epsilon\)
+Fact  := Num | Var | (Exp) | -Exp
+Num   := IntNum'
+Num'  := .Int | \(\epsilon\)
+Int   := Dig | DigInt
+Dig   := 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+Var   := a | b | c | ... | z
+Asig  := VarAsig'
+Asig' := =Exp
+\end{alltt}
+
+
+\end{document}
