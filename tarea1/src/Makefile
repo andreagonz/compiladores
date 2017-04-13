@@ -1,13 +1,20 @@
-OBJ = token.o lex.yy.o
+CXX=g++
+CXXFLAGS=-g -std=c++11
+BIN=interprete
 
-interprete: $(OBJ)
-			$(LINK.cc) $^ -o $@ -lfl
+SRC=$(wildcard *.cpp *.cc)
+OBJ=$(SRC:%.cpp=%.o)
 
-$(OBJ): token.h
+all: $(OBJ)
+	$(CXX) -o $(BIN) $^ -lfl
+
+%.o: %.c
+	$(CXX) $@ -c $<
 
 .PHONY: clean
 clean :
 		rm -f interprete *.o
 
+.PHONY: flex
 flex:
 		flex++ scanner.lex

@@ -31,7 +31,11 @@
 
 \subsubsection{Definir la gramática del lenguaje con la que piensas trabajar:}
 \begin{alltt}
-S     := Asig | Exp;
+S     := InstProg
+Prog  := InstProg | \(\epsilon\)
+Inst  := Asig; | Exp;
+Asig  := var VarAsig'
+Asig' := =Exp
 Exp   := TermExp'
 Exp'  := +TermExp' | -TermExp' | \(\epsilon\)
 Term  := FactTerm'
@@ -42,9 +46,12 @@ Num'  := .Int | \(\epsilon\)
 Int   := Dig | DigInt
 Dig   := 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
 Var   := a | b | c | ... | z
-Asig  := VarAsig'
-Asig' := =Exp
 \end{alltt}
 
+\begin{verbatim}
+var y = 9;
+var x = 2 + y;
+4 + 7;
+\end{verbatim}
 
 \end{document}
