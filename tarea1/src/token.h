@@ -30,6 +30,7 @@ Token(Tipo t, std::string v, int l, int c) : tipo(t), valor(v), linea(l), col(c)
     int get_col(void);
     std::string get_valor(void);
     std::string str(void);
+    Token * clona(void);
 };
 
 #endif

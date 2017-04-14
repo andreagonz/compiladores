@@ -2,6 +2,7 @@
 
 %{
     #include "token.h"
+    #include "nodo.h"
     #include "asintactico.h"
     #include <fstream>
     #include <queue>
@@ -10,7 +11,8 @@
     using namespace std;
     int linea = 1;
     int col = 1;
-    queue<Token> tokens;
+    queue<Token*> * tokens = new queue<Token*>;
+    queue<Nodo*> * nodos = new queue<Nodo*>;
 %}
 
 num	[0-9]+|[0-9]+\.[0-9]+
@@ -18,67 +20,67 @@ var	[a-z]
 
 %%
 "var"	{
-	    Token t(PVAR, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(PVAR, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 {num}	{
-	    Token t(NUM, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(NUM, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 {var}	{
-	    Token t(VAR, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(VAR, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "+"	{
-	    Token t(MAS, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MAS, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "-"	{
-	    Token t(MENOS, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MENOS, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "*"	{
-	    Token t(MULT, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MULT, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "/"	{
-	    Token t(DIV, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(DIV, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "("	{
-	    Token t(IZQ, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(IZQ, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 ")"	{
-	    Token t(DER, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(DER, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 ";"	{
-	    Token t(SEQ, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(SEQ, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
 "="	{
-	    Token t(ASIG, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(ASIG, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 
@@ -107,19 +109,15 @@ int main( int argc, char **argv ) {
     in.close();
 
     //Parser (lanza error si tiene error sintactico la entrada)
-    set_queue(tokens);    
-    S();
-    
-    cout << "Éxito" << endl;
-    
-    /*
-    for(int i = 0; !tokens.empty(); i++) {
-        cout << tokens.front().str() << " ";
-        tokens.pop();
-    }
-    cout << "\n";
-    */
+    Nodo * n = S(tokens, nodos);
+    cout << "Exito" << endl;
 
+    cout << str(n) << endl;
+    
+    clear(tokens, nodos);   
+    
+    // CHECAR QUE LA COLA NO SE VACIE AL CHECAR EL TIPO EN ASINTACTICO
+    
     //Interpretar usando cosa de visitor, regresa resultados: (un diccionario con las variables y sus valores asignados)
     return 0;
 }

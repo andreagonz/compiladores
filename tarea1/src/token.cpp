@@ -34,11 +34,11 @@ Tipo Token::get_tipo() {
     return tipo;
 }
 
-int Token:: get_linea() {
+int Token::get_linea() {
     return linea;
 }
 
-int Token:: get_col() {
+int Token::get_col() {
     return col;
 }
 
@@ -48,4 +48,8 @@ std::string Token::get_valor() {
 
 std::string Token::str() {
     return "(" + tipo_str(tipo) + ", " + valor + ")";
+}
+
+Token * Token::clona() {
+    return new Token(tipo, valor, linea, col);
 }

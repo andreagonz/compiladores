@@ -1,29 +1,32 @@
 #include<queue>
 #include<string>
 #include"token.h"
+#include"nodo.h"
 
-void set_queue(std::queue<Token> v);
+void clear(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool error(std::string s);
+Nodo * error(std::string s, std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool error();
+Nodo * error(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool S();
+Nodo * S(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Prog();
+Nodo * Prog(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Inst();
+Nodo * Inst(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Asig();
+Nodo * Asig(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool AsigP();
+Nodo * AsigP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Exp();
+Nodo * Exp(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool ExpP();
+Nodo * ExpP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Term();
+Nodo * Term(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool TermP();
+Nodo * TermP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-bool Fact();
+Nodo * Fact(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
+
+void pop_del(std::queue<Token*> * q);

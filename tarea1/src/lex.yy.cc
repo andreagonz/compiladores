@@ -430,6 +430,7 @@ static yyconst flex_int16_t yy_chk[45] =
 #line 1 "scanner.lex"
 #line 4 "scanner.lex"
     #include "token.h"
+    #include "nodo.h"
     #include "asintactico.h"
     #include <fstream>
     #include <queue>
@@ -438,8 +439,9 @@ static yyconst flex_int16_t yy_chk[45] =
     using namespace std;
     int linea = 1;
     int col = 1;
-    queue<Token> tokens;
-#line 443 "lex.yy.cc"
+    queue<Token*> * tokens = new queue<Token*>;
+    queue<Nodo*> * nodos = new queue<Nodo*>;
+#line 445 "lex.yy.cc"
 
 #define INITIAL 0
 
@@ -571,9 +573,9 @@ YY_DECL
 		}
 
 	{
-#line 19 "scanner.lex"
+#line 21 "scanner.lex"
 
-#line 577 "lex.yy.cc"
+#line 579 "lex.yy.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -632,106 +634,106 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 20 "scanner.lex"
+#line 22 "scanner.lex"
 {
-	    Token t(PVAR, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(PVAR, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 25 "scanner.lex"
+#line 27 "scanner.lex"
 {
-	    Token t(NUM, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(NUM, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 31 "scanner.lex"
+#line 33 "scanner.lex"
 {
-	    Token t(VAR, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(VAR, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 37 "scanner.lex"
+#line 39 "scanner.lex"
 {
-	    Token t(MAS, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MAS, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "scanner.lex"
+#line 45 "scanner.lex"
 {
-	    Token t(MENOS, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MENOS, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 49 "scanner.lex"
+#line 51 "scanner.lex"
 {
-	    Token t(MULT, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(MULT, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 55 "scanner.lex"
+#line 57 "scanner.lex"
 {
-	    Token t(DIV, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(DIV, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 61 "scanner.lex"
+#line 63 "scanner.lex"
 {
-	    Token t(IZQ, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(IZQ, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 67 "scanner.lex"
+#line 69 "scanner.lex"
 {
-	    Token t(DER, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(DER, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 73 "scanner.lex"
+#line 75 "scanner.lex"
 {
-	    Token t(SEQ, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(SEQ, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 79 "scanner.lex"
+#line 81 "scanner.lex"
 {
-	    Token t(ASIG, YYText(), linea, col);
-	    tokens.push(t);
+	    Token * t = new Token(ASIG, YYText(), linea, col);
+	    tokens->push(t);
 	    col++;            
 	}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 85 "scanner.lex"
+#line 87 "scanner.lex"
 {
 	    col++;
 	}
@@ -739,7 +741,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 89 "scanner.lex"
+#line 91 "scanner.lex"
 {
 	    linea++;
 	    col = 1;
@@ -747,7 +749,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 93 "scanner.lex"
+#line 95 "scanner.lex"
 {
 	    cout << "Carácter no reconocido en línea " << linea << ", columna " << col << ": " <<  yytext[0] << "\n";
 	    exit(0);
@@ -755,10 +757,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 97 "scanner.lex"
+#line 99 "scanner.lex"
 ECHO;
 	YY_BREAK
-#line 762 "lex.yy.cc"
+#line 764 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1713,7 +1715,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 97 "scanner.lex"
+#line 99 "scanner.lex"
 
 
 
@@ -1728,18 +1730,15 @@ int main( int argc, char **argv ) {
     in.close();
 
     //Parser (lanza error si tiene error sintactico la entrada)
-    set_queue(tokens);    
-    S();
+    Nodo * n = S(tokens, nodos);
+    cout << "Exito" << endl;
+
+    cout << str(n) << endl;
     
-    cout << "Éxito" << endl;
+    clear(tokens, nodos);
     
-    /*
-    for(int i = 0; !tokens.empty(); i++) {
-        cout << tokens.front().str() << " ";
-        tokens.pop();
-    }
-    cout << "\n";
-    */
+    //DELETE TODO (TOKENS Y NODOS)
+    
 
     //Interpretar usando cosa de visitor, regresa resultados: (un diccionario con las variables y sus valores asignados)
     return 0;
