@@ -109,13 +109,14 @@ int main( int argc, char **argv ) {
     in.close();
 
     //Parser (lanza error si tiene error sintactico la entrada)
+
     Nodo * n = S(tokens, nodos);
     cout << "Exito" << endl;
 
     cout << str(n) << endl;
-    
+
     clear(tokens, nodos);   
-    
+
     // CHECAR QUE LA COLA NO SE VACIE AL CHECAR EL TIPO EN ASINTACTICO
     
     //Interpretar usando cosa de visitor, regresa resultados: (un diccionario con las variables y sus valores asignados)

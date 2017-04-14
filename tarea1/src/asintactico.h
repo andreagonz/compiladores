@@ -5,6 +5,8 @@
 
 void clear(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
+Tipo front_tipo(std::queue<Token*> * q);
+
 Nodo * error(std::string s, std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
 Nodo * error(std::queue<Token*> * q, std::queue<Nodo*> * nodos);

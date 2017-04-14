@@ -8,12 +8,18 @@
 
 using namespace std;
 
+Tipo front_tipo(queue<Token*> * q) {
+    if(!q->empty())
+        return q->front()->get_tipo();
+    return Tipo(-1);
+}
+
 void clear(queue<Token*> * q, queue<Nodo*> * nodos) {
-    while(q->empty()) {
+    while(!q->empty()) {
         pop_del(q);
     }
     delete q;
-    while(nodos->empty()) {
+    while(!nodos->empty()) {
         Nodo *n = nodos->front();
         Token *t = n->get_token();
         nodos->pop();
@@ -24,16 +30,20 @@ void clear(queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * error(queue<Token*> * q, queue<Nodo*> * nodos) {
-    cout << "Error de sintáxis en línea " << q->front()->get_linea() << ", columna "
-         << q->front()->get_col() << ": " <<  "[" << q->front()->get_valor() << "]" << endl;
+    if(!q->empty()) {
+        cout << "Error de sintáxis en línea " << q->front()->get_linea() << ", columna "
+             << q->front()->get_col() << ": " <<  "[" << q->front()->get_valor() << "]" << endl;
+    } else cout << "Error de sintáxis al final del archivo. Punto y coma ';' esperado." << endl;
     clear(q, nodos);
     exit(1);
     return NULL;
 }
 
 Nodo * error(string s, queue<Token*> * q, queue<Nodo*> * nodos) {
-    cout << "Error de sintáxis en línea " << q->front()->get_linea() << ", columna "
-         << q->front()->get_col() << ": " <<  "[" << q->front()->get_valor() << "]" << endl;
+    if(!q->empty()) {
+        cout << "Error de sintáxis en línea " << q->front()->get_linea() << ", columna "
+             << q->front()->get_col() << ": " <<  "[" << q->front()->get_valor() << "]" << endl;
+    } else cout << "Error de sintáxis al final del archivo. Punto y coma ';' esperado." << endl;;
     cout << s << endl;
     clear(q, nodos);
     exit(1);
@@ -41,42 +51,43 @@ Nodo * error(string s, queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * S(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == PVAR
-       || q->front()->get_tipo() == NUM
-       || q->front()->get_tipo() == VAR
-       || q->front()->get_tipo() == IZQ
-       || q->front()->get_tipo() == MENOS) {
-        Nodo * n = Inst(q, nodos);
+    if(front_tipo(q) == PVAR
+       || front_tipo(q) == NUM
+       || front_tipo(q) == VAR
+       || front_tipo(q) == IZQ
+       || front_tipo(q) == MENOS) {
+        Nodo * n = Inst(q, nodos);        
         Nodo * m = Prog(q, nodos);
         if(m) {
             n->set_der(m);
         }
         return n;
-    }
+    }                                   
     return error("Asignación o expresión experados.", q, nodos);
 }
 
 Nodo * Prog(queue<Token*> * q, queue<Nodo*> * nodos) {
     if(q->empty())
         return NULL;
-    else if(q->front()->get_tipo() == PVAR
-            || q->front()->get_tipo() == NUM
-            || q->front()->get_tipo() == VAR
-            || q->front()->get_tipo() == IZQ
-            || q->front()->get_tipo() == MENOS) {
+    else if(front_tipo(q) == PVAR
+            || front_tipo(q) == NUM
+            || front_tipo(q) == VAR
+            || front_tipo(q) == IZQ
+            || front_tipo(q) == MENOS) {
         Nodo * n = Inst(q, nodos);
         Nodo * prog = Prog(q, nodos);
-        if(prog)
-            n->set_der(prog);        
+        if(prog) {
+            n->set_der(prog);
+        }
         return n;
     }
     return error(q, nodos);
 }
 
 Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == PVAR) {
+    if(front_tipo(q) == PVAR) {
         Nodo * n = Asig(q, nodos);
-        if(q->front()->get_tipo() == SEQ) {
+        if(front_tipo(q) == SEQ) {
             NodoSeq * m = new NodoSeq(q->front()->clona());
             nodos->push(m);
             pop_del(q);
@@ -86,12 +97,12 @@ Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
         return error("Punto y coma ';' esperado.", q, nodos);
     }
     
-    else if(q->front()->get_tipo() == NUM
-            || q->front()->get_tipo() == VAR
-            || q->front()->get_tipo() == IZQ
-            || q->front()->get_tipo() == MENOS) {
+    else if(front_tipo(q) == NUM
+            || front_tipo(q) == VAR
+            || front_tipo(q) == IZQ
+            || front_tipo(q) == MENOS) {
         Nodo * n = Exp(q, nodos);
-        if(q->front()->get_tipo() == SEQ) {
+        if(front_tipo(q) == SEQ) {
             NodoSeq * m = new NodoSeq(q->front()->clona());
             nodos->push(m);
             pop_del(q);
@@ -99,15 +110,14 @@ Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
             return m;
         }
         return error("Punto y coma ';' esperado.", q, nodos);
-    }
-    
+    }    
     return error("Punto y coma ';' esperado.", q, nodos);
 }
 
 Nodo * Asig(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == PVAR) {
+    if(front_tipo(q) == PVAR) {
         pop_del(q);
-        if(q->front()->get_tipo() == VAR) {
+        if(front_tipo(q) == VAR) {
             NodoVar * n = new NodoVar(q->front()->clona());
             nodos->push(n);
             pop_del(q);
@@ -120,7 +130,7 @@ Nodo * Asig(queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * AsigP(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == ASIG) {
+    if(front_tipo(q) == ASIG) {
         NodoAsig * n = new NodoAsig(q->front()->clona());
         nodos->push(n);
         pop_del(q);
@@ -132,10 +142,10 @@ Nodo * AsigP(queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * Exp(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == NUM
-       || q->front()->get_tipo() == VAR
-       || q->front()->get_tipo() == IZQ
-       || q->front()->get_tipo() == MENOS) {
+    if(front_tipo(q) == NUM
+       || front_tipo(q) == VAR
+       || front_tipo(q) == IZQ
+       || front_tipo(q) == MENOS) {
         Nodo * n = Term(q, nodos);
         Nodo * m = ExpP(q, nodos);
         if(m) {
@@ -148,7 +158,7 @@ Nodo * Exp(queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * ExpP(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == MAS) {
+    if(front_tipo(q) == MAS) {
         NodoSum * mas = new NodoSum(q->front()->clona());
         nodos->push(mas);
         pop_del(q);
@@ -163,7 +173,7 @@ Nodo * ExpP(queue<Token*> * q, queue<Nodo*> * nodos) {
         return mas;
     }
 
-    else if(q->front()->get_tipo() == MENOS) {
+    else if(front_tipo(q) == MENOS) {
         NodoMenos * menos = new NodoMenos(q->front()->clona());
         nodos->push(menos);
         pop_del(q);
@@ -178,20 +188,20 @@ Nodo * ExpP(queue<Token*> * q, queue<Nodo*> * nodos) {
         return menos;
     }
     
-    else if(q->front()->get_tipo() == DER
-            || q->front()->get_tipo() == SEQ
-            || q->front()->get_tipo() == MULT
-            || q->front()->get_tipo() == DIV) 
+    else if(front_tipo(q) == DER
+            || front_tipo(q) == SEQ
+            || front_tipo(q) == MULT
+            || front_tipo(q) == DIV) 
         return NULL;    
     
     return error("Expresión mal formada", q, nodos);
 }
 
 Nodo * Term(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == NUM
-       || q->front()->get_tipo() == VAR
-       || q->front()->get_tipo() == IZQ
-       || q->front()->get_tipo() == MENOS) {
+    if(front_tipo(q) == NUM
+       || front_tipo(q) == VAR
+       || front_tipo(q) == IZQ
+       || front_tipo(q) == MENOS) {
         Nodo * fact = Fact(q, nodos);
         Nodo * termp = TermP(q, nodos);
         if(termp) {
@@ -204,7 +214,7 @@ Nodo * Term(queue<Token*> * q, queue<Nodo*> * nodos) {
 }
 
 Nodo * TermP(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == MULT) {
+    if(front_tipo(q) == MULT) {
         NodoMult * mult = new NodoMult(q->front()->clona());
         nodos->push(mult);
         pop_del(q);
@@ -219,7 +229,7 @@ Nodo * TermP(queue<Token*> * q, queue<Nodo*> * nodos) {
         return mult;
     }
     
-    else if(q->front()->get_tipo() == DIV) {
+    else if(front_tipo(q) == DIV) {
         NodoDiv * div = new NodoDiv(q->front()->clona());
         nodos->push(div);
         pop_del(q);
@@ -234,41 +244,41 @@ Nodo * TermP(queue<Token*> * q, queue<Nodo*> * nodos) {
         return div;
     }
 
-    else if(q->front()->get_tipo() == DER
-            || q->front()->get_tipo() == SEQ
-            || q->front()->get_tipo() == MAS
-            || q->front()->get_tipo() == MENOS)
+    else if(front_tipo(q) == DER
+            || front_tipo(q) == SEQ
+            || front_tipo(q) == MAS
+            || front_tipo(q) == MENOS)
         return NULL;
     
     return error("Expresión mal formada", q, nodos);
 }
 
-Nodo * Fact(queue<Token*> * q, queue<Nodo*> * nodos) {
-    if(q->front()->get_tipo() == NUM) {
+Nodo * Fact(queue<Token*> * q, queue<Nodo*> * nodos) {    
+    if(front_tipo(q) == NUM) {
         NodoNum * n = new NodoNum(q->front()->clona());
         nodos->push(n);
         pop_del(q);
         return n;
     }
 
-    else if(q->front()->get_tipo() == VAR) {
+    else if(front_tipo(q) == VAR) {
         NodoVar * n = new NodoVar(q->front()->clona());
         nodos->push(n);
         pop_del(q);
         return n;
     }
 
-    else if(q->front()->get_tipo() == IZQ) {
+    else if(front_tipo(q) == IZQ) {
         pop_del(q);
         Nodo * n = Exp(q, nodos);
-        if(q->front()->get_tipo() == DER) {
+        if(front_tipo(q) == DER) {
             pop_del(q);
             return n;
         }
         return error("Paréntesis derecho ')' esperado.", q, nodos);
     }
 
-    else if(q->front()->get_tipo() == MENOS) {
+    else if(front_tipo(q) == MENOS) {
         NodoNeg * neg = new NodoNeg(q->front()->clona());
         nodos->push(neg);
         pop_del(q);
