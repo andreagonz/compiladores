@@ -9,15 +9,11 @@ protected:
     Nodo *izq;
     Nodo *der;
     Token *token;
-    bool bder;
-    bool bizq;
 public:
-Nodo(Token * t): token(t), der(0), izq(0), bder(false), bizq(false) {}
+Nodo(Token * t): token(t), der(0), izq(0) {}
     Nodo * get_izq(void);
     Nodo * get_der(void);
     Token * get_token(void);
-    bool tiene_izq(void);
-    bool tiene_der(void);
     Tipo get_tipo(void);
     void set_izq(Nodo * n);
     void set_der(Nodo * n);

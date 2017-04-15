@@ -58,9 +58,8 @@ Nodo * S(queue<Token*> * q, queue<Nodo*> * nodos) {
        || front_tipo(q) == MENOS) {
         Nodo * n = Inst(q, nodos);        
         Nodo * m = Prog(q, nodos);
-        if(m) {
+        if(m)
             n->set_der(m);
-        }
         return n;
     }                                   
     return error("Asignación o expresión experados.", q, nodos);
@@ -76,9 +75,8 @@ Nodo * Prog(queue<Token*> * q, queue<Nodo*> * nodos) {
             || front_tipo(q) == MENOS) {
         Nodo * n = Inst(q, nodos);
         Nodo * prog = Prog(q, nodos);
-        if(prog) {
+        if(prog)
             n->set_der(prog);
-        }
         return n;
     }
     return error(q, nodos);

@@ -21,22 +21,12 @@ Tipo Nodo::get_tipo() {
     return token->get_tipo();
 }
 
-bool Nodo::tiene_izq() {    
-    return bizq;
-}
-
-bool Nodo::tiene_der(){
-    return bder;
-}
-
 void Nodo::set_izq(Nodo * n) {    
     izq = n;
-    bizq = true;
 }
 
 void Nodo::set_der(Nodo * n){
     der = n;
-    bder = true;
 }
 
 void Nodo::set_token(Token * t){
@@ -59,7 +49,7 @@ string str(Nodo * n) {
 string aCadena(Nodo * vertice, int nivel, bool rama[]) {
     string s = vertice->str() + "\n";
     rama[nivel] = true;
-    if (vertice->tiene_izq() && vertice->tiene_der()) {
+    if (vertice->get_izq() && vertice->get_der()) {
         s += espacios(nivel, rama);
         s += "├─›";
         s += aCadena(vertice->get_izq(), nivel + 1, rama);
@@ -67,12 +57,12 @@ string aCadena(Nodo * vertice, int nivel, bool rama[]) {
         s += "└─»";
         rama[nivel] = false;
         s += aCadena(vertice->get_der(), nivel + 1, rama);
-    } else if (vertice->tiene_izq()) {
+    } else if (vertice->get_izq()) {
         s += espacios(nivel, rama);
         s += "└─›";
         rama[nivel] = false;
         s += aCadena(vertice->get_izq(), nivel + 1, rama);
-    } else if (vertice->tiene_der()) {
+    } else if (vertice->get_der()) {
         s += espacios(nivel, rama);
         s += "└─»";
         rama[nivel] = false;
@@ -94,10 +84,10 @@ string espacios(int n, bool rama[]) {
 int profundidad(Nodo * v){
     int izq = -1;
     int der = -1;
-    if(v->tiene_izq())
+    if(v->get_izq())
         izq = profundidad(v->get_izq());
     
-    if(v->tiene_der())
+    if(v->get_der())
         der = profundidad(v->get_der());
 
     if(izq > der)
