@@ -87,7 +87,7 @@ Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
         Nodo * n = Asig(q, nodos);
         if(front_tipo(q) == SEQ) {
             NodoSeq * m = new NodoSeq(q->front()->clona());
-            nodos->push(m);            
+            nodos->push(m);
             pop_del(q);
             m->set_izq(n);
             return m;

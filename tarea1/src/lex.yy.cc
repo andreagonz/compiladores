@@ -1724,6 +1724,11 @@ void yyfree (void * ptr )
 
 int main( int argc, char **argv ) {
     ifstream in(argv[1]);
+    if(argc < 2) {
+        cout << "Uso: ./interprete <archivo.txt>" << endl;
+        return 1;
+    }
+        
     if(!in.is_open()) {
         cout << "Archivo inválido" << endl;
         return 1;
