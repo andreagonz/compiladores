@@ -4,6 +4,8 @@
 #include"token.h"
 #include<string>
 
+class Visitor;
+
 class Nodo {
 protected:
     Nodo *izq;
@@ -19,56 +21,62 @@ Nodo(Token * t): token(t), der(0), izq(0) {}
     void set_der(Nodo * n);
     void set_token(Token * t);
     std::string str(void);
+    virtual void accept(Visitor * v) = 0;
 };
 
-class NodoOp: public Nodo {
+class NodoSum: public Nodo {
 public:
-NodoOp(Token * t): Nodo(t) {}
+NodoSum(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
-class NodoSum: public NodoOp {
+class NodoMenos: public Nodo {
 public:
-NodoSum(Token * t): NodoOp(t) {}
+NodoMenos(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
-class NodoMenos: public NodoOp {
+class NodoNeg: public Nodo {
 public:
-NodoMenos(Token * t): NodoOp(t) {}
+NodoNeg(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
-class NodoNeg: public NodoOp {
+class NodoDiv: public Nodo {
 public:
-NodoNeg(Token * t): NodoOp(t) {}
+NodoDiv(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
-class NodoDiv: public NodoOp {
+class NodoMult: public Nodo {
 public:
-NodoDiv(Token * t): NodoOp(t) {}
+NodoMult(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
-class NodoMult: public NodoOp {
+class NodoNum: public Nodo {
 public:
-NodoMult(Token * t): NodoOp(t) {}
+NodoNum(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
+    float get_valor(void);
 };
 
-class NodoNum: public NodoOp {
+class NodoVar: public Nodo {
 public:
-NodoNum(Token * t): NodoOp(t) {}
-};
-
-class NodoVar: public NodoOp {
-public:
-NodoVar(Token * t): NodoOp(t) {}
+NodoVar(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
 class NodoAsig: public Nodo {
 public:
 NodoAsig(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
 class NodoSeq: public Nodo {
 public:
 NodoSeq(Token * t): Nodo(t) {}
+    void accept(Visitor * v);
 };
 
 std::string str(Nodo * n);
@@ -78,4 +86,5 @@ std::string aCadena(Nodo * vertice, int nivel, bool rama[]);
 std::string espacios(int n, bool rama[]);
 
 int profundidad(Nodo * v);
+
 #endif

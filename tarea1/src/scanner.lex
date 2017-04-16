@@ -4,9 +4,11 @@
     #include "token.h"
     #include "nodo.h"
     #include "asintactico.h"
+    #include "visitor.h"
     #include <fstream>
     #include <queue>
     #include <string>
+    #include <unordered_map>
     
     using namespace std;
     int linea = 1;
@@ -108,17 +110,22 @@ int main( int argc, char **argv ) {
     lexer->yylex();
     in.close();
 
-    //Parser (lanza error si tiene error sintactico la entrada)
-
     Nodo * n = S(tokens, nodos);
-    cout << "Exito" << endl;
 
-    cout << str(n) << endl;
-
-    clear(tokens, nodos);   
-
-    // CHECAR QUE LA COLA NO SE VACIE AL CHECAR EL TIPO EN ASINTACTICO
+    ofstream arbolf("arbol.txt");
+    arbolf << str(n);
+    arbolf.close();
     
-    //Interpretar usando cosa de visitor, regresa resultados: (un diccionario con las variables y sus valores asignados)
+    unordered_map<string, float> * vars = new unordered_map<string, float>;
+    VisitorInterpreta * vi = new VisitorInterpreta(vars);
+    n->accept(vi);
+    if(!vi->hubo_error())
+        for(auto elem : (*vars))
+            cout << elem.first << ": " << elem.second << endl;
+    
+    clear(tokens, nodos);
+    delete vi;
+    delete vars;
+    // HACER LOG DE RESULTADOS DE CADA INSTRUCCION
     return 0;
 }

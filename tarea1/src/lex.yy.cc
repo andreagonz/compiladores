@@ -432,16 +432,18 @@ static yyconst flex_int16_t yy_chk[45] =
     #include "token.h"
     #include "nodo.h"
     #include "asintactico.h"
+    #include "visitor.h"
     #include <fstream>
     #include <queue>
     #include <string>
+    #include <unordered_map>
     
     using namespace std;
     int linea = 1;
     int col = 1;
     queue<Token*> * tokens = new queue<Token*>;
     queue<Nodo*> * nodos = new queue<Nodo*>;
-#line 445 "lex.yy.cc"
+#line 447 "lex.yy.cc"
 
 #define INITIAL 0
 
@@ -573,9 +575,9 @@ YY_DECL
 		}
 
 	{
-#line 21 "scanner.lex"
+#line 23 "scanner.lex"
 
-#line 579 "lex.yy.cc"
+#line 581 "lex.yy.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -634,7 +636,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 22 "scanner.lex"
+#line 24 "scanner.lex"
 {
 	    Token * t = new Token(PVAR, YYText(), linea, col);
 	    tokens->push(t);
@@ -643,7 +645,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 27 "scanner.lex"
+#line 29 "scanner.lex"
 {
 	    Token * t = new Token(NUM, YYText(), linea, col);
 	    tokens->push(t);
@@ -652,7 +654,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 33 "scanner.lex"
+#line 35 "scanner.lex"
 {
 	    Token * t = new Token(VAR, YYText(), linea, col);
 	    tokens->push(t);
@@ -661,7 +663,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 39 "scanner.lex"
+#line 41 "scanner.lex"
 {
 	    Token * t = new Token(MAS, YYText(), linea, col);
 	    tokens->push(t);
@@ -670,7 +672,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 45 "scanner.lex"
+#line 47 "scanner.lex"
 {
 	    Token * t = new Token(MENOS, YYText(), linea, col);
 	    tokens->push(t);
@@ -679,7 +681,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "scanner.lex"
+#line 53 "scanner.lex"
 {
 	    Token * t = new Token(MULT, YYText(), linea, col);
 	    tokens->push(t);
@@ -688,7 +690,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 57 "scanner.lex"
+#line 59 "scanner.lex"
 {
 	    Token * t = new Token(DIV, YYText(), linea, col);
 	    tokens->push(t);
@@ -697,7 +699,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 63 "scanner.lex"
+#line 65 "scanner.lex"
 {
 	    Token * t = new Token(IZQ, YYText(), linea, col);
 	    tokens->push(t);
@@ -706,7 +708,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 69 "scanner.lex"
+#line 71 "scanner.lex"
 {
 	    Token * t = new Token(DER, YYText(), linea, col);
 	    tokens->push(t);
@@ -715,7 +717,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 75 "scanner.lex"
+#line 77 "scanner.lex"
 {
 	    Token * t = new Token(SEQ, YYText(), linea, col);
 	    tokens->push(t);
@@ -724,7 +726,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 81 "scanner.lex"
+#line 83 "scanner.lex"
 {
 	    Token * t = new Token(ASIG, YYText(), linea, col);
 	    tokens->push(t);
@@ -733,7 +735,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 87 "scanner.lex"
+#line 89 "scanner.lex"
 {
 	    col++;
 	}
@@ -741,7 +743,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 91 "scanner.lex"
+#line 93 "scanner.lex"
 {
 	    linea++;
 	    col = 1;
@@ -749,7 +751,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 95 "scanner.lex"
+#line 97 "scanner.lex"
 {
 	    cout << "Carácter no reconocido en línea " << linea << ", columna " << col << ": " <<  yytext[0] << "\n";
 	    exit(0);
@@ -757,10 +759,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 99 "scanner.lex"
+#line 101 "scanner.lex"
 ECHO;
 	YY_BREAK
-#line 764 "lex.yy.cc"
+#line 766 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1715,7 +1717,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 99 "scanner.lex"
+#line 101 "scanner.lex"
 
 
 
@@ -1729,18 +1731,23 @@ int main( int argc, char **argv ) {
     lexer->yylex();
     in.close();
 
-    //Parser (lanza error si tiene error sintactico la entrada)
-
     Nodo * n = S(tokens, nodos);
-    cout << "Exito" << endl;
 
-    cout << str(n) << endl;
-
-    clear(tokens, nodos);   
-
-    // CHECAR QUE LA COLA NO SE VACIE AL CHECAR EL TIPO EN ASINTACTICO
+    ofstream arbolf("arbol.txt");
+    arbolf << str(n);
+    arbolf.close();
     
-    //Interpretar usando cosa de visitor, regresa resultados: (un diccionario con las variables y sus valores asignados)
+    unordered_map<string, float> * vars = new unordered_map<string, float>;
+    VisitorInterpreta * vi = new VisitorInterpreta(vars);
+    n->accept(vi);
+    if(!vi->hubo_error())
+        for(auto elem : (*vars))
+            cout << elem.first << ": " << elem.second << endl;
+    
+    clear(tokens, nodos);
+    delete vi;
+    delete vars;
+    // HACER LOG DE RESULTADOS DE CADA INSTRUCCION
     return 0;
 }
 

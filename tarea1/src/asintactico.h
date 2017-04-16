@@ -23,11 +23,11 @@ Nodo * AsigP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
 Nodo * Exp(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-Nodo * ExpP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
+Nodo * ExpP(std::queue<Token*> * q, std::queue<Nodo*> * nodos, Nodo ** tope);
 
 Nodo * Term(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 
-Nodo * TermP(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
+Nodo * TermP(std::queue<Token*> * q, std::queue<Nodo*> * nodos, Nodo ** tope);
 
 Nodo * Fact(std::queue<Token*> * q, std::queue<Nodo*> * nodos);
 

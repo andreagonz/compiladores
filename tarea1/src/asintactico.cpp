@@ -8,6 +8,8 @@
 
 using namespace std;
 
+Nodo * raiz = NULL;
+
 Tipo front_tipo(queue<Token*> * q) {
     if(!q->empty())
         return q->front()->get_tipo();
@@ -50,7 +52,7 @@ Nodo * error(string s, queue<Token*> * q, queue<Nodo*> * nodos) {
     return NULL;
 }
 
-Nodo * S(queue<Token*> * q, queue<Nodo*> * nodos) {
+Nodo * S(queue<Token*> * q, queue<Nodo*> * nodos) {    
     if(front_tipo(q) == PVAR
        || front_tipo(q) == NUM
        || front_tipo(q) == VAR
@@ -87,7 +89,9 @@ Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
         Nodo * n = Asig(q, nodos);
         if(front_tipo(q) == SEQ) {
             NodoSeq * m = new NodoSeq(q->front()->clona());
-            nodos->push(m);
+            if(!raiz)
+                raiz = m;
+            nodos->push(m);            
             pop_del(q);
             m->set_izq(n);
             return m;
@@ -144,45 +148,42 @@ Nodo * Exp(queue<Token*> * q, queue<Nodo*> * nodos) {
        || front_tipo(q) == VAR
        || front_tipo(q) == IZQ
        || front_tipo(q) == MENOS) {
-        Nodo * n = Term(q, nodos);
-        Nodo * m = ExpP(q, nodos);
-        if(m) {
-            m->set_izq(n);
-            return m;
+        Nodo * term = Term(q, nodos);
+        Nodo * tope = NULL;
+        Nodo * expp = ExpP(q, nodos, &tope);
+        if(expp) {
+            expp->set_izq(term);
+            return tope;
         }
-        return n;
+        return term;
     }
     return error("Expresión mal formada", q, nodos);
 }
 
-Nodo * ExpP(queue<Token*> * q, queue<Nodo*> * nodos) {
+Nodo * ExpP(queue<Token*> * q, queue<Nodo*> * nodos, Nodo ** tope) {
     if(front_tipo(q) == MAS) {
         NodoSum * mas = new NodoSum(q->front()->clona());
+        *tope = mas;
         nodos->push(mas);
         pop_del(q);
         Nodo * term = Term(q, nodos);
-        Nodo * expp = ExpP(q, nodos);
-        if(expp) {
-            expp->set_izq(term);
-            mas->set_der(expp);
-        }
-        else
-            mas->set_der(term);
+        Nodo * expp = ExpP(q, nodos, tope);
+        mas->set_der(term);
+        if(expp)
+            expp->set_izq(mas);            
         return mas;
     }
 
     else if(front_tipo(q) == MENOS) {
         NodoMenos * menos = new NodoMenos(q->front()->clona());
+        *tope = menos;
         nodos->push(menos);
         pop_del(q);
         Nodo * term = Term(q, nodos);
-        Nodo * expp = ExpP(q, nodos);
-        if(expp) {
-            expp->set_izq(term);
-            menos->set_der(expp);
-        }
-        else
-            menos->set_der(term);
+        Nodo * expp = ExpP(q, nodos, tope);
+        menos->set_der(term);
+        if(expp)
+            expp->set_izq(menos);        
         return menos;
     }
     
@@ -201,44 +202,41 @@ Nodo * Term(queue<Token*> * q, queue<Nodo*> * nodos) {
        || front_tipo(q) == IZQ
        || front_tipo(q) == MENOS) {
         Nodo * fact = Fact(q, nodos);
-        Nodo * termp = TermP(q, nodos);
+        Nodo * tope = NULL;
+        Nodo * termp = TermP(q, nodos, &tope);
         if(termp) {
             termp->set_izq(fact);
-            return termp;
+            return tope;
         }
         return fact;
     }    
     return error("Expresión mal formada", q, nodos);
 }
 
-Nodo * TermP(queue<Token*> * q, queue<Nodo*> * nodos) {
+Nodo * TermP(queue<Token*> * q, queue<Nodo*> * nodos, Nodo ** tope) {
     if(front_tipo(q) == MULT) {
         NodoMult * mult = new NodoMult(q->front()->clona());
+        *tope = mult;
         nodos->push(mult);
         pop_del(q);
         Nodo * fact = Fact(q, nodos);
-        Nodo * termp = TermP(q, nodos);
-        if(termp) {
-            termp->set_izq(fact);
-            mult->set_der(termp);
-        }
-        else
-            mult->set_der(fact);
+        Nodo * termp = TermP(q, nodos, tope);
+        mult->set_der(fact);
+        if(termp)
+            termp->set_izq(mult);
         return mult;
     }
     
     else if(front_tipo(q) == DIV) {
         NodoDiv * div = new NodoDiv(q->front()->clona());
+        *tope = div;
         nodos->push(div);
         pop_del(q);
         Nodo * fact = Fact(q, nodos);
-        Nodo * termp = TermP(q, nodos);
-        if(termp) {
-            termp->set_izq(fact);
-            div->set_der(termp);
-        }
-        else
-            div->set_der(fact);
+        Nodo * termp = TermP(q, nodos, tope);
+        div->set_der(fact);
+        if(termp)
+            termp->set_izq(div);
         return div;
     }
 

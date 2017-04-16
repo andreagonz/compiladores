@@ -6,7 +6,7 @@ SRC=$(wildcard *.cpp *.cc)
 OBJ=$(SRC:%.cpp=%.o)
 
 all: $(OBJ)
-	$(CXX) -o $(BIN) $^ -lfl
+	$(CXX) -g -std=c++11 -o $(BIN) $^ -lfl
 
 %.o: %.c
 	$(CXX) $@ -c $<

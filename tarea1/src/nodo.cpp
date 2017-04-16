@@ -1,7 +1,9 @@
+#include"nodo.h"
 #include<string>
 #include"token.h"
-#include"nodo.h"
+#include"visitor.h"
 #include<iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -35,6 +37,46 @@ void Nodo::set_token(Token * t){
 
 string Nodo::str() {
     return token->str();
+}
+
+float NodoNum::get_valor() {
+    return stof(token->get_valor());
+}
+
+void NodoNum::accept(Visitor * v) {
+    v->visitaNodoNum(this);
+}
+
+void NodoVar::accept(Visitor * v) {
+    v->visitaNodoVar(this);
+}
+
+void NodoSum::accept(Visitor * v) {
+    v->visitaNodoSum(this);
+}
+
+void NodoMenos::accept(Visitor * v) {
+    v->visitaNodoMenos(this);
+}
+
+void NodoNeg::accept(Visitor * v) {
+    v->visitaNodoNeg(this);
+}
+
+void NodoMult::accept(Visitor * v) {
+    v->visitaNodoMult(this);
+}
+
+void NodoDiv::accept(Visitor * v) {
+    v->visitaNodoDiv(this);
+}
+
+void NodoSeq::accept(Visitor * v) {
+    v->visitaNodoSeq(this);
+}
+
+void NodoAsig::accept(Visitor * v) {
+    v->visitaNodoAsig(this);
 }
 
 string str(Nodo * n) {
