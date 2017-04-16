@@ -15,7 +15,7 @@ void VisitorInterpreta::visitaNodoVar(NodoVar * n) {
             resultado = (*vars)[n->get_token()->get_valor()];
         else {
             error = true;
-            cout << "Error de sintáxis en línea " << n->get_token()->get_linea() << ", columna "
+            cout << "Error semántico en línea " << n->get_token()->get_linea() << ", columna "
                  << n->get_token()->get_col() << ". Variable '" << n->get_token()->get_valor() << "' no declarada." << endl;
         }
     }
