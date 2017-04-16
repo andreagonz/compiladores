@@ -2,6 +2,7 @@
 #define VISITOR_H
 
 #include<unordered_map>
+#include<string>
 
 class NodoNum;
 class NodoVar;
@@ -30,8 +31,10 @@ class VisitorInterpreta: public Visitor {
     float resultado;
     bool error;
     std::unordered_map<std::string, float> * vars;
+    std::string log;
+    int contador;
 public:
-VisitorInterpreta(std::unordered_map<std::string, float> * um) : resultado(0), vars(um), error(false) {}
+VisitorInterpreta(std::unordered_map<std::string, float> * um) : resultado(0), vars(um), error(false), log(""), contador(1) {}
     void visitaNodoNum(NodoNum * n);
     void visitaNodoVar(NodoVar * n);
     void visitaNodoSum(NodoSum * n);
@@ -42,6 +45,7 @@ VisitorInterpreta(std::unordered_map<std::string, float> * um) : resultado(0), v
     void visitaNodoAsig(NodoAsig * n);
     void visitaNodoSeq(NodoSeq * n);
     bool hubo_error();
+    std::string get_log();
 };
 
 #endif

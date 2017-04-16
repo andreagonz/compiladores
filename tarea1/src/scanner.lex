@@ -18,7 +18,7 @@
 %}
 
 num	[0-9]+|[0-9]+\.[0-9]+
-var	[a-z]
+var	[a-z][a-zA-Z0-9]*
 
 %%
 "var"	{
@@ -96,7 +96,8 @@ var	[a-z]
 	}
 .	{
 	    cout << "Carácter no reconocido en línea " << linea << ", columna " << col << ": " <<  yytext[0] << "\n";
-	    exit(0);
+            clear(tokens, nodos);
+	    exit(1);
 	}
 %%
 
@@ -119,13 +120,17 @@ int main( int argc, char **argv ) {
     unordered_map<string, float> * vars = new unordered_map<string, float>;
     VisitorInterpreta * vi = new VisitorInterpreta(vars);
     n->accept(vi);
-    if(!vi->hubo_error())
+    if(!vi->hubo_error()) {
         for(auto elem : (*vars))
             cout << elem.first << ": " << elem.second << endl;
+        ofstream logf("log.txt");
+        logf << vi->get_log();
+        logf.close();
+    }
     
     clear(tokens, nodos);
     delete vi;
     delete vars;
-    // HACER LOG DE RESULTADOS DE CADA INSTRUCCION
+
     return 0;
 }

@@ -6,7 +6,7 @@ using namespace std;
 
 void VisitorInterpreta::visitaNodoNum(NodoNum * n) {
     if(!error)
-        resultado = n->get_valor();    
+        resultado = n->get_valor();
 }
 
 void VisitorInterpreta::visitaNodoVar(NodoVar * n) {
@@ -79,6 +79,12 @@ void VisitorInterpreta::visitaNodoAsig(NodoAsig * n) {
 void VisitorInterpreta::visitaNodoSeq(NodoSeq * n) {
     if(!error) {
         n->get_izq()->accept(this);
+        if(n->get_izq()->get_tipo() == ASIG)
+            log += "Instrucción " + to_string(contador) + ": Asignación de variable '"
+                + n->get_izq()->get_izq()->get_token()->get_valor() + "' con valor " + to_string(resultado) + "\n";
+        else
+            log += "Instrucción " + to_string(contador) + ": " + to_string(resultado) + "\n";
+        contador++;
         resultado = 0;
         if(n->get_der())
             n->get_der()->accept(this);
@@ -87,4 +93,8 @@ void VisitorInterpreta::visitaNodoSeq(NodoSeq * n) {
 
 bool VisitorInterpreta::hubo_error() {
     return error;
+}
+
+string VisitorInterpreta::get_log() {
+    return log;
 }

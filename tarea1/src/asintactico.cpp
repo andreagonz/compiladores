@@ -8,8 +8,6 @@
 
 using namespace std;
 
-Nodo * raiz = NULL;
-
 Tipo front_tipo(queue<Token*> * q) {
     if(!q->empty())
         return q->front()->get_tipo();
@@ -89,8 +87,6 @@ Nodo * Inst(queue<Token*> * q, queue<Nodo*> * nodos) {
         Nodo * n = Asig(q, nodos);
         if(front_tipo(q) == SEQ) {
             NodoSeq * m = new NodoSeq(q->front()->clona());
-            if(!raiz)
-                raiz = m;
             nodos->push(m);            
             pop_del(q);
             m->set_izq(n);
